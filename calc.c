@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-int ft_atoi(char *str)
+int ft_atoi(char *c)
 {
     int i;
     int sign;
@@ -10,34 +10,66 @@ int ft_atoi(char *str)
     i = 0;
     sign = 1;
     result = 0;
-    while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+    while (c[i] == 32 || (c[i] >= 9 && c[i] <= 13))
     {
         i++;
     }
-    if (str[i] == '-')
+    if (c[i] == '-')
     {
         sign = -1;
         i++;
     }
-    else if (str[i] == '+')
+    else if (c[i] == '+')
     {
         i++;
     }
-    while (str[i] != '\0' && str[i] >= '0' && str[i] <= '9')
+    while (c[i] != '\0' && c[i] >= '0' && c[i] <= '9')
     {
         result *= 10;
-        result += str[i] - '0';
+        result += c[i] - '0';
         i++;
     }
     return (result * sign);
 }
 
-int opeartions(int ac, char *av[])
+int main(int ac, char *av[])
 {
+    int num1 = ft_atoi(av[1]);
+    char op = av[2][0];
+    int num2 = ft_atoi(av[3]);
     int result;
+
+    result = 0;
 
     if (ac == 4)
     {
-        result = av[1] + av[3];
+        switch (op)
+        {
+        case '+':
+            result = num1 + num2;
+            break;
+        case '-':
+            result = num1 - num2;
+            break;
+        case '*':
+            result = num1 * num2;
+            break;
+        case '/':
+            if (num2 != 0)
+            {
+                result = (double)num1 / (double)num2;
+            }
+            break;
+        default:
+            printf("Error\n");
+            return 1;
+        }
     }
+    else
+    {
+        return (printf("Error\n"));
+    }
+    printf("%d\n", result);
+
+    return 0;
 }
