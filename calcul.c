@@ -90,80 +90,105 @@ double ft_power(double base, int exponent)
     return result;
 }
 
-int main(int ac, char *av[])
+int main()
 {
-    float num1 = ft_atof(av[1]);
-    float num2 = ft_atof(av[3]);
+    float num1;
+    float num2;
     int op;
     float result = 0;
-
-    printf("Select a operation to perform the calculation: \n");
-    printf("\n1. Addition \t\t2. Subtraction \n3. Multiplication \t4..Division \n5. Power \t\t6. Square root \n7. Reminder \t\t8. Sin \n9. Cos \t\t\t10. Tan \n11. Log \t\t12. PI \n13. Factorial \t\t14. EXIT\n");
-    scanf("%d", &op);
-
-    switch (op)
+    do
     {
-    case 1: // addition
-        printf("You chose: Addition\n");
-        scanf("%f", &num1);
-        scanf("%f", &num2);
-        result = num1 + num2;
-        printf("%.2f", result);
-        break;
-    case 2: // subtraction
-        printf("You chose: Subtraction\n");
-        scanf("%f", &num1);
-        scanf("%f", &num2);
-        result = num1 - num2;
-        printf("%.2f", result);
-        break;
-    case 3: // multiplication
-        printf("You chose: Multiplication\n");
-        scanf("%f", &num1);
-        scanf("%f", &num2);
-        result = num1 * num2;
-        printf("%.2f", result);
-        break;
-    case 4: // division
-        printf("You chose: Division\n");
-        scanf("%f", &num1);
-        scanf("%f", &num2);
-        if (num2 == 0)
+        printf("Select a operation to perform the calculation: \n");
+        printf("\n1. Addition \t\t2. Subtraction \n3. Multiplication \t4..Division \n5. Power \t\t6. Square root \n7. Reminder \t\t8. Sin \n9. Cos \t\t\t10. Tan \n11. Log \t\t12. PI \n13. Factorial \t\t14. EXIT\n");
+        scanf("%d", &op);
+
+        switch (op)
         {
+        case 1: // addition
+            printf("You chose: Addition\n");
+            printf("Enter first number: \n");
+            scanf("%f", &num1);
+            printf("Enter second number: \n");
+            scanf("%f", &num2);
+            result = num1 + num2;
+            printf("Addition of two number is: %.2f\n", result);
+            break;
+        case 2: // subtraction
+            printf("You chose: Subt raction\n");
+            printf("Enter first number: \n");
+            scanf("%f", &num1);
+            printf("Enter second number: \n");
+            scanf("%f", &num2);
+            result = num1 - num2;
+            printf("%.2f\n", result);
+            break;
+        case 3: // multiplication
+            printf("You chose: Multiplication\n");
+            printf("Enter first number: \n");
+            scanf("%f", &num1);
+            printf("Enter second number: \n");
+            scanf("%f", &num2);
+            result = num1 * num2;
+            printf("%.2f\n", result);
+            break;
+        case 4: // division
+            printf("You chose: Division\n");
+            printf("Enter first number: \n");
+            scanf("%f", &num1);
+            printf("Enter second number: \n");
+            scanf("%f", &num2);
+            if (num2 == 0)
+            {
+                printf("Error\n");
+                scanf("%f\n", &num2);
+            }
+            else
+            {
+                result = num1 / num2;
+                printf("%.2f\n", result);
+            }
+            break;
+        case 5: // power of the number
+            printf("You chose: Power\n");
+            printf("Enter the number: \n");
+            scanf("%f", &num1);
+            printf("Enter the exponent: \n");
+            scanf("%f", &num2);
+            result = ft_power(num1, num2);
+            printf("%.2f\n", result);
+            break;
+        case 6: // square root of the number
+            printf("You chose: Square root\n");
+            printf("Enter the number: \n");
+            scanf("%f", &num1);
+            result = ft_sqrt(num1);
+            if (result == -1)
+            {
+                printf("Error\n"); // negative number is undefined
+            }
+            else
+            {
+                printf("%.2f\n", result);
+            }
+            break;
+        case 7: // reminder aka modulus
+            printf("You chose: Reminder\n");
+            printf("Enter the first number: \n");
+            scanf("%f", &num1);
+            printf("Enter the second number: \n");
+            scanf("%f", &num2);
+            result = (int)num1 % (int)num2;
+            printf("%.2f\n", result);
+            break;
+        case 8:
+            printf("You chose: Sin\n");
+            scanf("%f", &num1);
+            break;
+        default:
             printf("Error\n");
+            break;
         }
-        else
-        {
-            result = num1 / num2;
-            printf("%.2f", result);
-        }
-        break;
-    case 5: // power of the number
-        printf("You chose: Power\n");
-        scanf("%f", &num1);
-        scanf("%f", &num2);
-        result = (int)num1 ^ (int)num2;
-        printf("%.2f", result);
-        break;
-    case 6: // square root of the number
-        printf("You chose: Square root\n");
-        scanf("%f", &num1);
-        result = ft_sqrt(num1);
-        break;
-    case 7: // reminder
-        printf("You chose: Reminder\n");
-        scanf("%f", &num1);
-        scanf("%f", &num2);
-        result = (int)num1 % (int)num2;
-        printf("%.2f", result);
-        break;
-    case 8:
-        printf("You chose: Sin\n");
-        scanf("%f", &num1);
-        break;
-    default:
-        printf("Error\n");
-        break;
-    }
+    } while (op != 8);
+
     return 0;
 }
