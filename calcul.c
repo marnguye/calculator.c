@@ -1,0 +1,169 @@
+#include <stdio.h>
+
+double ft_atof(char *c) // convertion ascii to float
+{
+    double result;
+    double fraction;
+    int sign;
+    int hasFraction;
+
+    result = 0.0;
+    fraction = 0.0;
+    sign = 1;
+    hasFraction = 0;
+    while (*c == ' ' || *c == '\t')
+    {
+        c++;
+    }
+    if (*c == '-')
+    {
+        sign = -1;
+        c++;
+    }
+    else if (*c == '+')
+    {
+        c++;
+    }
+
+    while (*c >= '0' && *c <= '9')
+    {
+        result = result * 10.0 + (*c - '0');
+        c++;
+    }
+
+    if (*c == '.')
+    {
+        c++;
+        double decimal = 10.0;
+        while (*c >= '0' && *c <= '9')
+        {
+            fraction += (*c - '0') / decimal;
+            decimal *= 10.0;
+            hasFraction = 1;
+            c++;
+        }
+    }
+    result = sign * (result + fraction);
+
+    return result;
+}
+
+double ft_sqrt(double x) // newton-raphson method
+{
+    if (x < 0)
+    {
+        return -1.0; // negative number is undefined
+    }
+    double value = 0.000001;
+    double guess = x;
+
+    while ((guess * guess - x) > value)
+    {
+        guess = 0.5 * (guess + x / guess);
+    }
+    return guess;
+}
+
+double ft_power(double base, int exponent)
+{
+    if (exponent == 0)
+    {
+        return 1.0;
+    }
+    double result = 1.0;
+    int i;
+
+    if (exponent > 0)
+    {
+        for (i = 0; i < exponent; i++)
+        {
+            result *= base;
+        }
+    }
+    else
+    {
+        for (i = 0; i > exponent; i--)
+        {
+            result /= base;
+        }
+    }
+    return result;
+}
+
+int main(int ac, char *av[])
+{
+    float num1 = ft_atof(av[1]);
+    float num2 = ft_atof(av[3]);
+    int op;
+    float result = 0;
+
+    printf("Select a operation to perform the calculation: \n");
+    printf("\n1. Addition \t\t2. Subtraction \n3. Multiplication \t4..Division \n5. Power \t\t6. Square root \n7. Reminder \t\t8. Sin \n9. Cos \t\t\t10. Tan \n11. Log \t\t12. PI \n13. Factorial \t\t14. EXIT\n");
+    scanf("%d", &op);
+
+    switch (op)
+    {
+    case 1: // addition
+        printf("You chose: Addition\n");
+        scanf("%f", &num1);
+        scanf("%f", &num2);
+        result = num1 + num2;
+        printf("%.2f", result);
+        break;
+    case 2: // subtraction
+        printf("You chose: Subtraction\n");
+        scanf("%f", &num1);
+        scanf("%f", &num2);
+        result = num1 - num2;
+        printf("%.2f", result);
+        break;
+    case 3: // multiplication
+        printf("You chose: Multiplication\n");
+        scanf("%f", &num1);
+        scanf("%f", &num2);
+        result = num1 * num2;
+        printf("%.2f", result);
+        break;
+    case 4: // division
+        printf("You chose: Division\n");
+        scanf("%f", &num1);
+        scanf("%f", &num2);
+        if (num2 == 0)
+        {
+            printf("Error\n");
+        }
+        else
+        {
+            result = num1 / num2;
+            printf("%.2f", result);
+        }
+        break;
+    case 5: // power of the number
+        printf("You chose: Power\n");
+        scanf("%f", &num1);
+        scanf("%f", &num2);
+        result = (int)num1 ^ (int)num2;
+        printf("%.2f", result);
+        break;
+    case 6: // square root of the number
+        printf("You chose: Square root\n");
+        scanf("%f", &num1);
+        result = ft_sqrt(num1);
+        break;
+    case 7: // reminder
+        printf("You chose: Reminder\n");
+        scanf("%f", &num1);
+        scanf("%f", &num2);
+        result = (int)num1 % (int)num2;
+        printf("%.2f", result);
+        break;
+    case 8:
+        printf("You chose: Sin\n");
+        scanf("%f", &num1);
+        break;
+    default:
+        printf("Error\n");
+        break;
+    }
+    return 0;
+}
