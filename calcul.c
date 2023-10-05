@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MY_PI_4 0.78539816339744830961566084581988
-#define MY_PI_2 1.57079632679489661923132169163975
+#define MY_PI 3.1415926535897932384626433832795
 
 double ft_sqrt(double x) // newton-raphson method
 {
@@ -78,39 +77,6 @@ double ft_cos(double x, int y)
     return result;
 }
 
-double ft_fmod(double x, double y)
-{
-    if (y == 0.0)
-    {
-        return 0.0 / 0.0;
-    }
-    double quotient = x / y;
-    double integerPart = (double)((int)quotient);
-    return x - y * integerPart;
-}
-
-double ft_tan(double x, int terms)
-{
-    while (x > MY_PI_4)
-    {
-        x -= MY_PI_2;
-    }
-    while (x < -MY_PI_4)
-    {
-        x += MY_PI_2;
-    }
-    double value = 0.0;
-    double term = x;
-    int sign = 1;
-    for (int i = 1; i <= terms; i++)
-    {
-        value += term;
-        sign = -sign;
-        term = term * x * x * sign / ((2 * i) + 1);
-    }
-    return value;
-}
-
 int main()
 {
     float num1;
@@ -119,8 +85,12 @@ int main()
     float result = 0;
     do
     {
-        printf("Select a operation to perform the calculation: \n");
-        printf("\n1. Addition \t\t2. Subtraction \n3. Multiplication \t4..Division \n5. Power \t\t6. Square root \n7. Reminder \t\t8. Sin \n9. Cos \t\t\t10. Tan \n11. Log \t\t12. PI \n13. Factorial \t\t14. EXIT\n");
+        printf("***************************************************\n");
+        printf("* Select an operation to perform the calculation: *\n");
+        printf("*\t\t\t\t\t\t  *");
+        printf("\n*  1. Addition \t\t 2. Subtraction\t\t  *\n*  3. Multiplication \t 4. Division\t\t  *\n*  5. Power \t\t 6. Square root\t\t  *\n*  7. Reminder \t\t 8. Sin\t\t\t  *\n*  9. Cos \t\t10. Tan\t\t\t  *\n* 11. Cot \t\t12. PI\t\t\t  *\n* 13. Factorial \t14. Log\t\t\t  *\n* 15. EXIT\t\t\t\t\t  *\n");
+        printf("*\t\t\t\t\t\t  *\n");
+        printf("***************************************************\n");
         scanf("%d", &op);
 
         switch (op)
@@ -205,18 +175,22 @@ int main()
             printf("You chose: Sin\n");
             printf("Enter the degree: \n");
             scanf("%f", &num1);
-            num2 = num1 * 3.14159265358979323846 / 180.0;
-            int terms = 10;
+            num2 = num1 * (MY_PI / 180.0);
+            int terms = 40;
             result = ft_sin(num2, terms);
+            if (ft_absolute(result) < 1e-6)
+            {
+                result = 0.0;
+            }
             printf("The sine of %.2f degrees is approximately: %.6f\n", num1, result);
             break;
         case 9: // cosine of degree
             printf("You chose: Cos\n");
             printf("Enter the degree: \n");
             scanf("%f", &num1);
-            num2 = num1 * (3.14159265358979323846 / 180.0); // 90 degrees converted to radians
-            int term = 40;                                  // increase the number of terms for better accuracy
-            result = ft_cos(num2, term);                    // check if the result is close to 0 and round it to 0
+            num2 = num1 * (MY_PI / 180.0); // 90 degrees converted to radians
+            terms = 40;                    // increase the number of terms for better accuracy
+            result = ft_cos(num2, terms);  // check if the result is close to 0 and round it to 0
             if (ft_absolute(result) < 1e-6)
             {
                 result = 0.0;
@@ -227,10 +201,33 @@ int main()
             printf("You chose: Tan\n");
             printf("Enter the degree: \n");
             scanf("%f", &num1);
+            if (num1 == 90.000000 || num1 == 270.000000)
+            {
+                printf("Error\n");
+                break;
+            }
             num2 = num1 * (3.14159265358979323846 / 180.0);
-            term = 40;
-            result = ft_tan(num2, terms);
-            printf("The tangent of %.2f degrees os approximately: %.6f\n", num1, result);
+            terms = 40;
+            float result_sin = ft_sin(num2, 40);
+            float result_cos = ft_cos(num2, 40);
+            result = result_sin / result_cos;
+            printf("The tangent of %.2f degrees is approximately: %.6f\n", num1, result);
+            break;
+        case 11:
+            printf("You chose: Cot\n");
+            printf("Enter the degree: \n");
+            scanf("%f", &num1);
+            if (num1 == 0.000000 || num1 == 180.000000 || num1 == 360.000000)
+            {
+                printf("Error\n");
+                break;
+            }
+            num2 = num1 * (3.14159265358979323846 / 180.0);
+            terms = 40;
+            result_sin = ft_sin(num2, 10);
+            result_cos = ft_cos(num2, 40);
+            result = result_cos / result_sin;
+            printf("The cotangent of %.2f degrees os approximately: %.6f\n", num1, result);
             break;
         case 13: // factorial
             printf("You chose: Factorial\n");
@@ -239,7 +236,7 @@ int main()
             result = ft_factorial((int)num1);
             printf("The factorial of the number %f: %.1f\n", num1, result);
             break;
-        case 14: // exit
+        case 15: // exit
             printf("You chose: Exit\n");
             exit(0);
             break;
@@ -247,7 +244,7 @@ int main()
             printf("Error\n");
             break;
         }
-    } while (op != 14);
+    } while (op != 15);
 
     return 0;
 }
