@@ -1,52 +1,5 @@
 #include <stdio.h>
-
-double ft_atof(char *c) // convertion ascii to float
-{
-    double result;
-    double fraction;
-    int sign;
-    int hasFraction;
-
-    result = 0.0;
-    fraction = 0.0;
-    sign = 1;
-    hasFraction = 0;
-    while (*c == ' ' || *c == '\t')
-    {
-        c++;
-    }
-    if (*c == '-')
-    {
-        sign = -1;
-        c++;
-    }
-    else if (*c == '+')
-    {
-        c++;
-    }
-
-    while (*c >= '0' && *c <= '9')
-    {
-        result = result * 10.0 + (*c - '0');
-        c++;
-    }
-
-    if (*c == '.')
-    {
-        c++;
-        double decimal = 10.0;
-        while (*c >= '0' && *c <= '9')
-        {
-            fraction += (*c - '0') / decimal;
-            decimal *= 10.0;
-            hasFraction = 1;
-            c++;
-        }
-    }
-    result = sign * (result + fraction);
-
-    return result;
-}
+#include <stdlib.h>
 
 double ft_sqrt(double x) // newton-raphson method
 {
@@ -64,32 +17,56 @@ double ft_sqrt(double x) // newton-raphson method
     return guess;
 }
 
-double ft_power(double base, int exponent)
+int ft_power(int x, int y)
 {
-    if (exponent == 0)
+    unsigned long long int i;
+    unsigned long long int sum;
+
+    i = 1;
+    sum = 1;
+    for (i = 1; i <= y; i++)
+    {
+        sum = sum * x;
+    }
+    return sum;
+}
+
+int ft_factorial(int n)
+{
+    if (n <= 1)
     {
         return 1.0;
     }
-    double result = 1.0;
-    int i;
+    return n * ft_factorial(n - 1);
+}
 
-    if (exponent > 0)
+double ft_sin(double x, int y)
+{
+    double result = 0.0;
+    double term = x;
+    int sign = -1;
+    for (int i = 1; i <= y; i += 2)
     {
-        for (i = 0; i < exponent; i++)
-        {
-            result *= base;
-        }
-    }
-    else
-    {
-        for (i = 0; i > exponent; i--)
-        {
-            result /= base;
-        }
+        result += term;
+        term = term * (x * x) / ((i + 1) * i + 2);
+        sign *= -1;
     }
     return result;
 }
 
+double ft_cos(double x, int y)
+{
+    double result = 1.0;
+    double term = 1.0;
+    int sign = -1;
+    for (int i = 1; i <= y; i += 2)
+    {
+        term = term * (x * x) / ((i + 1) * i + 2);
+        result += sign * term;
+        sign *= -1;
+    }
+    return result;
+}
 int main()
 {
     float num1;
@@ -180,15 +157,39 @@ int main()
             result = (int)num1 % (int)num2;
             printf("%.2f\n", result);
             break;
-        case 8:
+        case 8: // sin
             printf("You chose: Sin\n");
+            printf("Enter the degree: \n");
             scanf("%f", &num1);
+            num2 = num1 * 3.14159265358979323846 / 180.0;
+            int terms = 10;
+            result = ft_sin(num2, terms);
+            printf("The sine of %.2f degrees is approximately %.6f\n", num1, result);
+            break;
+        case 9: // cos
+            printf("You chose: Cos\n");
+            printf("Enter the degree: \n");
+            scanf("%f", &num1);
+            num2 = num1 * 3.14159265358979323846 / 180.0;
+            int term = 10;
+            result = ft_cos(num2, term);
+            printf("The cos of %.2f degrees is approximately %.6f\n", num1, result);
+        case 13: // factorial
+            printf("You chose: Factorial\n");
+            printf("Enter the number: \n");
+            scanf("%f", &num1);
+            result = ft_factorial((int)num1);
+            printf("%.1f\n", result);
+            break;
+        case 14: // exit
+            printf("You chose: Exit\n");
+            exit(0);
             break;
         default:
             printf("Error\n");
             break;
         }
-    } while (op != 8);
+    } while (op != 14);
 
     return 0;
 }
