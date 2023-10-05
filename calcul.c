@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define MY_PI_4 0.78539816339744830961566084581988
+#define MY_PI_2 1.57079632679489661923132169163975
 
 double ft_sqrt(double x) // newton-raphson method
 {
@@ -40,16 +42,26 @@ int ft_factorial(int n)
     return n * ft_factorial(n - 1);
 }
 
+double ft_absolute(double x)
+{
+    if (x < 0)
+    {
+        return -x; // change the sign to make it positive
+    }
+    else
+    {
+        return x; // if its positive, return the same value
+    }
+}
+
 double ft_sin(double x, int y)
 {
     double result = 0.0;
     double term = x;
-    int sign = -1;
     for (int i = 1; i <= y; i += 2)
     {
         result += term;
-        term = term * (x * x) / ((i + 1) * i + 2);
-        sign *= -1;
+        term = term * (-x * x) / ((i + 1) * (i + 2));
     }
     return result;
 }
@@ -58,15 +70,47 @@ double ft_cos(double x, int y)
 {
     double result = 1.0;
     double term = 1.0;
-    int sign = -1;
-    for (int i = 1; i <= y; i += 2)
+    for (int i = 2; i <= y; i += 2)
     {
-        term = term * (x * x) / ((i + 1) * i + 2);
-        result += sign * term;
-        sign *= -1;
+        term = term * (-x * x) / (i * (i - 1));
+        result += term;
     }
     return result;
 }
+
+double ft_fmod(double x, double y)
+{
+    if (y == 0.0)
+    {
+        return 0.0 / 0.0;
+    }
+    double quotient = x / y;
+    double integerPart = (double)((int)quotient);
+    return x - y * integerPart;
+}
+
+double ft_tan(double x, int terms)
+{
+    while (x > MY_PI_4)
+    {
+        x -= MY_PI_2;
+    }
+    while (x < -MY_PI_4)
+    {
+        x += MY_PI_2;
+    }
+    double value = 0.0;
+    double term = x;
+    int sign = 1;
+    for (int i = 1; i <= terms; i++)
+    {
+        value += term;
+        sign = -sign;
+        term = term * x * x * sign / ((2 * i) + 1);
+    }
+    return value;
+}
+
 int main()
 {
     float num1;
@@ -157,29 +201,43 @@ int main()
             result = (int)num1 % (int)num2;
             printf("The reminder of numbers: %.2f\n", result);
             break;
-        case 8: // sin
+        case 8: // sine of degree
             printf("You chose: Sin\n");
             printf("Enter the degree: \n");
             scanf("%f", &num1);
             num2 = num1 * 3.14159265358979323846 / 180.0;
             int terms = 10;
             result = ft_sin(num2, terms);
-            printf("The sine of %.2f degrees is approximately %.6f\n", num1, result);
+            printf("The sine of %.2f degrees is approximately: %.6f\n", num1, result);
             break;
-        case 9: // cos
+        case 9: // cosine of degree
             printf("You chose: Cos\n");
             printf("Enter the degree: \n");
             scanf("%f", &num1);
-            num2 = num1 * 3.14159265358979323846 / 180.0;
-            int term = 10;
-            result = ft_cos(num2, term);
-            printf("The cos of %.2f degrees is approximately %.6f\n", num1, result);
+            num2 = num1 * (3.14159265358979323846 / 180.0); // 90 degrees converted to radians
+            int term = 40;                                  // increase the number of terms for better accuracy
+            result = ft_cos(num2, term);                    // check if the result is close to 0 and round it to 0
+            if (ft_absolute(result) < 1e-6)
+            {
+                result = 0.0;
+            }
+            printf("The cosine of %.2f degrees is approximately: %.6f\n", num1, result);
+            break;
+        case 10:
+            printf("You chose: Tan\n");
+            printf("Enter the degree: \n");
+            scanf("%f", &num1);
+            num2 = num1 * (3.14159265358979323846 / 180.0);
+            term = 40;
+            result = ft_tan(num2, terms);
+            printf("The tangent of %.2f degrees os approximately: %.6f\n", num1, result);
+            break;
         case 13: // factorial
             printf("You chose: Factorial\n");
             printf("Enter the number: \n");
             scanf("%f", &num1);
             result = ft_factorial((int)num1);
-            printf("The factorail of the number %f: %.1f\n", num1, result);
+            printf("The factorial of the number %f: %.1f\n", num1, result);
             break;
         case 14: // exit
             printf("You chose: Exit\n");
