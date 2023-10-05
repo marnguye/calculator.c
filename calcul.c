@@ -88,7 +88,7 @@ int main()
             printf("Enter second number: \n");
             scanf("%f", &num2);
             result = num1 + num2;
-            printf("Addition of two number is: %.2f\n", result);
+            printf("The addition of numbers: %.2f\n", result);
             break;
         case 2: // subtraction
             printf("You chose: Subt raction\n");
@@ -97,7 +97,7 @@ int main()
             printf("Enter second number: \n");
             scanf("%f", &num2);
             result = num1 - num2;
-            printf("%.2f\n", result);
+            printf("The subtraction of numbers: %.2f\n", result);
             break;
         case 3: // multiplication
             printf("You chose: Multiplication\n");
@@ -106,7 +106,7 @@ int main()
             printf("Enter second number: \n");
             scanf("%f", &num2);
             result = num1 * num2;
-            printf("%.2f\n", result);
+            printf("The multiplication of numbers: %.2f\n", result);
             break;
         case 4: // division
             printf("You chose: Division\n");
@@ -122,7 +122,7 @@ int main()
             else
             {
                 result = num1 / num2;
-                printf("%.2f\n", result);
+                printf("The division of numbers: %.2f\n", result);
             }
             break;
         case 5: // power of the number
@@ -132,7 +132,7 @@ int main()
             printf("Enter the exponent: \n");
             scanf("%f", &num2);
             result = ft_power(num1, num2);
-            printf("%.2f\n", result);
+            printf("The power of the number:%.2f\n", result);
             break;
         case 6: // square root of the number
             printf("You chose: Square root\n");
@@ -145,7 +145,7 @@ int main()
             }
             else
             {
-                printf("%.2f\n", result);
+                printf("The square root of the number: %.2f\n", result);
             }
             break;
         case 7: // reminder aka modulus
@@ -155,7 +155,7 @@ int main()
             printf("Enter the second number: \n");
             scanf("%f", &num2);
             result = (int)num1 % (int)num2;
-            printf("%.2f\n", result);
+            printf("The reminder of numbers: %.2f\n", result);
             break;
         case 8: // sin
             printf("You chose: Sin\n");
@@ -179,7 +179,7 @@ int main()
             printf("Enter the number: \n");
             scanf("%f", &num1);
             result = ft_factorial((int)num1);
-            printf("%.1f\n", result);
+            printf("The factorail of the number %f: %.1f\n", num1, result);
             break;
         case 14: // exit
             printf("You chose: Exit\n");
