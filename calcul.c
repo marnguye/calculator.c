@@ -77,6 +77,36 @@ double ft_cos(double x, int y)
     return result;
 }
 
+double ft_log(double x, int terms)
+{
+    if (x <= 0)
+    {
+        return -1.0;
+    }
+    double result = 0.0;
+
+    while (x >= 10.0)
+    {
+        x /= 10.0;
+        result += 1.0;
+    }
+
+    // Approximate the logarithm using the log(1 + x) Maclaurin series
+    double y = (x - 1.0) / (x + 1.0);
+    double term = y;
+    double sum = term;
+
+    for (int n = 3; n <= terms; n += 2)
+    {
+        term *= (y * y);
+        sum += (term / n);
+    }
+
+    result += 2.0 * sum;
+
+    return result;
+}
+
 int main()
 {
     float num1;
@@ -197,7 +227,7 @@ int main()
             }
             printf("The cosine of %.2f degrees is approximately: %.6f\n", num1, result);
             break;
-        case 10:
+        case 10: // tangent of degree
             printf("You chose: Tan\n");
             printf("Enter the degree: \n");
             scanf("%f", &num1);
@@ -213,7 +243,7 @@ int main()
             result = result_sin / result_cos;
             printf("The tangent of %.2f degrees is approximately: %.6f\n", num1, result);
             break;
-        case 11:
+        case 11: // cotangent of degree
             printf("You chose: Cot\n");
             printf("Enter the degree: \n");
             scanf("%f", &num1);
@@ -235,6 +265,14 @@ int main()
             scanf("%f", &num1);
             result = ft_factorial((int)num1);
             printf("The factorial of the number %f: %.1f\n", num1, result);
+            break;
+        case 14:
+            printf("You chose: Log\n");
+            printf("Enter the number: \n");
+            scanf("%f", &num1);
+            int term = 100;
+            result = ft_log(num1, terms);
+            printf("The logarithm of number %f: %.6f\n", num1, result);
             break;
         case 15: // exit
             printf("You chose: Exit\n");
