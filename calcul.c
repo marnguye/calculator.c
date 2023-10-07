@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define EULER_CONST 2.718281828459045235
+#define TAYLOR_ITERATIONS 20
+#define LN10 2.3025850929940456840179914546844
 
-double ft_sqrt(double x) // newton-raphson method
+double ft_sqrt(double x)
 {
     if (x < 0)
     {
@@ -76,35 +79,39 @@ double ft_cos(double x, int y)
     return result;
 }
 
-double ft_log(double x, int terms)
+double ft_ln(double x)
 {
-    if (x <= 0)
+    if (x <= 0.0)
     {
-        // Handle invalid input, log of a non-positive number is undefined
-        return -1.0;
+        // Logarithm is undefined for non-positive numbers
+        return -1.0 / 0.0; // Return negative infinity
     }
 
     double result = 0.0;
+    double term = (x - 1) / (x + 1);
+    double term_squared = term * term;
+    double numerator = term;
+    int n = 1;
 
-    // Normalize x to be in the range (1, 10)
-    while (x >= 10.0)
+    while (1)
     {
-        x /= 10.0;
-        result += 1.0;
+        result += numerator / n;
+
+        numerator *= term_squared;
+        n += 2;
+
+        if (numerator < 1e-15)
+        {
+            break;
+        }
     }
 
-    // Calculate the fractional part of the logarithm using a Taylor series
-    double y = (x - 1) / (x + 1);
-    double term = y;
-    double term_squared = y * y;
+    return 2.0 * result;
+}
 
-    for (int n = 1; n <= terms; n += 2)
-    {
-        result += term / n;
-        term *= -term_squared;
-    }
-    result /= 2.302585092994046;
-    return result;
+double ft_log10(double x)
+{
+    return ft_ln(x) / LN10;
 }
 
 int main()
@@ -117,9 +124,10 @@ int main()
     do
     {
         printf("***************************************************\n");
+        printf("*\t\t\t\t\t\t  *\n");
         printf("* Select an operation to perform the calculation: *\n");
         printf("*\t\t\t\t\t\t  *");
-        printf("\n*  1. Addition \t\t 2. Subtraction\t\t  *\n*  3. Multiplication \t 4. Division\t\t  *\n*  5. Power \t\t 6. Square root\t\t  *\n*  7. Reminder \t\t 8. Sin\t\t\t  *\n*  9. Cos \t\t10. Tan\t\t\t  *\n* 11. Cot \t\t12. PI\t\t\t  *\n* 13. Factorial \t14. Log\t\t\t  *\n* 15. EXIT\t\t\t\t\t  *\n");
+        printf("\n*  1. Addition \t\t 2. Subtraction\t\t  *\n*  3. Multiplication \t 4. Division\t\t  *\n*  5. Power \t\t 6. Square root\t\t  *\n*  7. Reminder \t\t 8. Sin\t\t\t  *\n*  9. Cos \t\t10. Tan\t\t\t  *\n* 11. Cot \t\t12. PI\t\t\t  *\n* 13. Factorial \t14. Ln\t\t\t  *  \n* 15. Log10 \t\t16. EXIT\t\t  *\n");
         printf("*\t\t\t\t\t\t  *\n");
         printf("***************************************************\n");
         scanf("%d", &op);
@@ -272,13 +280,20 @@ int main()
             printf("The factorial of the number %f: %.1f\n", num1, result);
             break;
         case 14:
-            printf("You chose: Log\n");
+            printf("You chose: Ln\n");
             printf("Enter the number: \n");
             scanf("%f", &num1);
-            int term = 10000;
-            result = ft_log(num1, terms);
-            printf("The logarithm of number %f: %.6f\n", num1, result);
-        case 15: // exit
+            result = ft_ln((double)num1);
+            printf("The natural logarithm of number %f: %.6f\n", num1, (double)result);
+            break;
+        case 15:
+            printf("You chose: Log10\n");
+            printf("Enter the number: \n");
+            scanf("%f", &num1);
+            result = ft_log10((double)num1);
+            printf("The logarithm with the base 10 of number %f: %.6f\n", num1, (double)result);
+            break;
+        case 16: // exit
             printf("You chose: Exit\n");
             exit(0);
             break;
@@ -286,7 +301,7 @@ int main()
             printf("Error\n");
             break;
         }
-    } while (op != 15);
+    } while (op != 16);
 
     return 0;
 }
