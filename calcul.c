@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MY_PI 3.1415926535897932384626433832795
 
 double ft_sqrt(double x) // newton-raphson method
 {
@@ -81,29 +80,30 @@ double ft_log(double x, int terms)
 {
     if (x <= 0)
     {
+        // Handle invalid input, log of a non-positive number is undefined
         return -1.0;
     }
+
     double result = 0.0;
 
+    // Normalize x to be in the range (1, 10)
     while (x >= 10.0)
     {
         x /= 10.0;
         result += 1.0;
     }
 
-    // Approximate the logarithm using the log(1 + x) Maclaurin series
-    double y = (x - 1.0) / (x + 1.0);
+    // Calculate the fractional part of the logarithm using a Taylor series
+    double y = (x - 1) / (x + 1);
     double term = y;
-    double sum = term;
+    double term_squared = y * y;
 
-    for (int n = 3; n <= terms; n += 2)
+    for (int n = 1; n <= terms; n += 2)
     {
-        term *= (y * y);
-        sum += (term / n);
+        result += term / n;
+        term *= -term_squared;
     }
-
-    result += 2.0 * sum;
-
+    result /= 2.302585092994046;
     return result;
 }
 
@@ -113,6 +113,7 @@ int main()
     float num2;
     int op;
     float result = 0;
+    double pi = 3.1415926535897932384626433832795;
     do
     {
         printf("***************************************************\n");
@@ -205,7 +206,7 @@ int main()
             printf("You chose: Sin\n");
             printf("Enter the degree: \n");
             scanf("%f", &num1);
-            num2 = num1 * (MY_PI / 180.0);
+            num2 = num1 * (pi / 180.0);
             int terms = 40;
             result = ft_sin(num2, terms);
             if (ft_absolute(result) < 1e-6)
@@ -218,9 +219,9 @@ int main()
             printf("You chose: Cos\n");
             printf("Enter the degree: \n");
             scanf("%f", &num1);
-            num2 = num1 * (MY_PI / 180.0); // 90 degrees converted to radians
-            terms = 40;                    // increase the number of terms for better accuracy
-            result = ft_cos(num2, terms);  // check if the result is close to 0 and round it to 0
+            num2 = num1 * (pi / 180.0);   // 90 degrees converted to radians
+            terms = 40;                   // increase the number of terms for better accuracy
+            result = ft_cos(num2, terms); // check if the result is close to 0 and round it to 0
             if (ft_absolute(result) < 1e-6)
             {
                 result = 0.0;
@@ -259,6 +260,10 @@ int main()
             result = result_cos / result_sin;
             printf("The cotangent of %.2f degrees os approximately: %.6f\n", num1, result);
             break;
+        case 12:
+            printf("You chose: PI\n");
+            printf("PI: %.16f\n", pi);
+            break;
         case 13: // factorial
             printf("You chose: Factorial\n");
             printf("Enter the number: \n");
@@ -270,10 +275,9 @@ int main()
             printf("You chose: Log\n");
             printf("Enter the number: \n");
             scanf("%f", &num1);
-            int term = 100;
+            int term = 10000;
             result = ft_log(num1, terms);
             printf("The logarithm of number %f: %.6f\n", num1, result);
-            break;
         case 15: // exit
             printf("You chose: Exit\n");
             exit(0);
